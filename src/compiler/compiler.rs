@@ -21,6 +21,7 @@ use crate::compiler::msvc;
 use crate::compiler::msvc::MSVC;
 use crate::compiler::nvcc::NVCC;
 use crate::compiler::rust::{Rust, RustupProxy};
+use crate::compiler::tasking_vx::TaskingVX;
 use crate::dist;
 #[cfg(feature = "dist-client")]
 use crate::dist::pkg;
@@ -976,6 +977,8 @@ clang
 gcc
 #elif defined(__DCC__)
 diab
+#elif definded(__CTC__)
+tasking_vx
 #endif
 "
     .to_vec();
@@ -1058,6 +1061,13 @@ diab
                         CCompiler::new(NVCC, executable, &pool)
                             .map(|c| Box::new(c) as Box<dyn Compiler<T>>),
                     );
+                }
+                "tasking_vx" => {
+                    debug!("Found Tasking VX");
+                    return Box::new(
+                        CCompiler::new(TaskingVX, executable, &pool)
+                            .map(|c| Box::new(c) as Box<dyn Compiler<T>>),
+                    )
                 }
                 _ => (),
             }
