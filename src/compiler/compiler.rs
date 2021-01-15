@@ -1135,6 +1135,13 @@ __VERSION__
                             .map(|c| Box::new(c) as Box<dyn Compiler<T>>),
                     );
                 }
+                "tasking_vx" => {
+                    debug!("Found Tasking VX");
+                    return Box::new(
+                        CCompiler::new(TaskingVX, executable, &pool)
+                            .map(|c| Box::new(c) as Box<dyn Compiler<T>>),
+                    )
+                }
                 _ => (),
             }
         }
